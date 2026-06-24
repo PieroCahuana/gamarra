@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ambulantes - Gamarra</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="usil.png" alt="Logo">
+        <div class="brand-text">
+          <h2>Gamarra</h2>
+          <span>Gestión Municipal</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="puestos.html">🏪 Puestos</a>
+        <a href="licencias.html">📄 Licencias</a>
+        <a href="ambulantes.html" class="active">🧍 Ambulantes</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-logout" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Ambulantes</h1>
+          <p>Gestión de ambulantes registrados</p>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h2>Listado de Ambulantes</h2>
+        <button class="btn btn-primary" onclick="abrirModal()">+ Nuevo ambulante</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre completo</th>
+                <th>DNI</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="ambulantesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="ambulanteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Nuevo Ambulante</h2>
+      </div>
+      <div class="modal-body">
+        <form id="ambulanteForm">
+          <input type="hidden" id="ambulanteId">
+
+          <div class="form-group">
+            <label class="form-label">Nombre completo</label>
+            <input type="text" id="nombre_completo" class="form-control" required>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">DNI</label>
+              <input type="text" id="dni" class="form-control" maxlength="8" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Teléfono</label>
+              <input type="text" id="telefono" class="form-control" maxlength="9" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Dirección</label>
+            <input type="text" id="direccion" class="form-control" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="guardarAmbulante()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ambulantes.js"></script>
+</body>
+</html>

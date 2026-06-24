@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Gamarra</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="usil.png" alt="Logo">
+        <div class="brand-text">
+          <h2>Gamarra</h2>
+          <span>Gestión Municipal</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html" class="active">📊 Dashboard</a>
+        <a href="puestos.html">🏪 Puestos</a>
+        <a href="licencias.html">📄 Licencias</a>
+        <a href="ambulantes.html">🧍 Ambulantes</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-logout" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Resumen general del sistema Gamarra</p>
+        </div>
+        <div class="topbar-user">Administrador</div>
+      </div>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="label">Total de Puestos</div>
+          <div class="value" id="statPuestos">0</div>
+          <div class="extra">Registros de puestos comerciales</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Licencias Activas</div>
+          <div class="value" id="statLicencias">0</div>
+          <div class="extra">Licencias registradas en el sistema</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Ambulantes</div>
+          <div class="value" id="statAmbulantes">0</div>
+          <div class="extra">Comerciantes ambulantes registrados</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Estado del Sistema</div>
+          <div class="value" style="font-size: 24px;">Activo</div>
+          <div class="extra">API operativa y autenticación activa</div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="card">
+          <h3>Resumen Operativo</h3>
+          <p style="color:#6b7280; line-height:1.7;">
+            Desde este panel puedes gestionar la información de puestos, licencias y ambulantes.
+            La idea es que luego aquí agregues filtros, gráficos, reportes y alertas del sistema.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Accesos rápidos</h3>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <a href="puestos.html" class="btn btn-secondary" style="text-decoration:none; text-align:center;">Ir a Puestos</a>
+            <a href="licencias.html" class="btn btn-secondary" style="text-decoration:none; text-align:center;">Ir a Licencias</a>
+            <a href="ambulantes.html" class="btn btn-secondary" style="text-decoration:none; text-align:center;">Ir a Ambulantes</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

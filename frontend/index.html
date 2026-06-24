@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gamarra - Iniciar Sesión</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-left">
+      <span class="badge">Sistema de Gestión Municipal</span>
+      <h1>Plataforma Gamarra</h1>
+      <p>
+        Administra puestos, licencias y ambulantes desde una sola plataforma.
+        Controla la información de forma rápida, clara y centralizada.
+      </p>
+    </div>
+
+    <div class="login-right">
+      <div class="login-card">
+        <img src="usil.png" alt="Logo" class="login-logo">
+
+        <h2>Bienvenido</h2>
+        <p>Ingresa con tus credenciales para acceder al sistema.</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" id="email" class="form-control" placeholder="correo@ejemplo.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <input type="password" id="password" class="form-control" placeholder="********" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+          <p class="loading-text" id="loadingText">Validando credenciales...</p>
+          <div class="alert alert-error" id="error-message">Correo o contraseña incorrectos.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

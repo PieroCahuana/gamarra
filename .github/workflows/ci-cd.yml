@@ -1,0 +1,112 @@
+name: CI/CD Pipeline - Plataforma Gamarra
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  REGISTRY: ${{ secrets.ACR_LOGIN_SERVER }}
+  IMAGE_NAME: gamarra-api
+
+jobs:
+  # ── JOB 1: Pruebas ─────────────────────────────────────
+  test:
+    name: Ejecutar pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+
+      - name: Ejecutar pruebas con pytest
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI_TEST }}
+          SECRET_KEY: test-secret-key
+        run: |
+          pytest tests/ -v --tb=short --cov=app --cov-report=xml
+
+      - name: Subir reporte de cobertura
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+
+  # ── JOB 2: Build y push de imagen Docker ───────────────
+  build:
+    name: Build imagen Docker
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    outputs:
+      image_tag: ${{ steps.meta.outputs.version }}
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Login en Azure Container Registry
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Extraer metadatos para Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+
+      - name: Build y push imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  # ── JOB 3: Deploy a Azure Container Apps ───────────────
+  deploy:
+    name: Deploy en Azure
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://gamarra-api.azurecontainerapps.io
+    steps:
+      - name: Login en Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy en Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }}
+          acrName: ${{ secrets.ACR_NAME }}
+          containerAppName: gamarra-api
+          resourceGroup: rg-gamarra-prod
+          imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
+          environmentVariables: |
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            DB_NAME=gamarra_db
+
+      - name: Verificar despliegue
+        run: |
+          sleep 20
+          curl --fail https://gamarra-api.azurecontainerapps.io/health || exit 1
+          echo "✅ Despliegue exitoso"

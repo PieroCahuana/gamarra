@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Licencias - Gamarra</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="usil.png" alt="Logo">
+        <div class="brand-text">
+          <h2>Gamarra</h2>
+          <span>Gestión Municipal</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="puestos.html">🏪 Puestos</a>
+        <a href="licencias.html" class="active">📄 Licencias</a>
+        <a href="ambulantes.html">🧍 Ambulantes</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-logout" onclick="logout()">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <div>
+          <h1>Licencias</h1>
+          <p>Gestión de licencias registradas</p>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <h2>Listado de Licencias</h2>
+        <button class="btn btn-primary" onclick="abrirModal()">+ Nueva licencia</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ambulante ID</th>
+                <th>Tipo</th>
+                <th>Inicio</th>
+                <th>Vencimiento</th>
+                <th>Estado</th>
+                <th>Puesto ID</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="licenciasTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="licenciaModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Nueva Licencia</h2>
+      </div>
+      <div class="modal-body">
+        <form id="licenciaForm">
+          <input type="hidden" id="licenciaId">
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Ambulante ID</label>
+              <input type="text" id="ambulante_id" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tipo</label>
+              <select id="tipo" class="form-control" required>
+                <option value="temporal">Temporal</option>
+                <option value="anual">Anual</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Fecha inicio</label>
+              <input type="date" id="fecha_inicio" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fecha vencimiento</label>
+              <input type="date" id="fecha_vencimiento" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Documentos URLs (separados por coma)</label>
+            <input type="text" id="documentos_urls" class="form-control" placeholder="https://doc1.com, https://doc2.com">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="guardarLicencia()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/licencias.js"></script>
+</body>
+</html>
